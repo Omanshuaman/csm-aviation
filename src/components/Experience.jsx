@@ -3,9 +3,11 @@ import { Jet } from "./Jet";
 import { Sky } from "@react-three/drei";
 
 import CloudsGroup from "./Clouds";
+import { Perf } from "r3f-perf";
 export const Experience = () => {
   return (
     <>
+      <Perf position="top-left" />
       <CameraControls />
       <Sky />
 
