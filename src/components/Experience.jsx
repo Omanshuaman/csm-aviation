@@ -1,15 +1,21 @@
-import { OrbitControls, Float } from "@react-three/drei";
-import { Background } from "./Background";
+import { Float, CameraControls } from "@react-three/drei";
 import { Jet } from "./Jet";
+import { Sky } from "@react-three/drei";
+
+import CloudsGroup from "./Clouds";
 export const Experience = () => {
   return (
     <>
-      <OrbitControls />
-      <Background />
-      <Float floatIntensity={1.5} rotationIntensity={0.5} speed={2}>
+      <CameraControls />
+      <Sky />
+
+      <ambientLight intensity={Math.PI / 3} />
+
+      <Float floatIntensity={2} rotationIntensity={0} speed={2}>
         <Jet scale={0.4} rotation-y={Math.PI * 1} rotation-x={Math.PI * 0.01} />
       </Float>
+
+      <CloudsGroup />
     </>
   );
 };
-//fff
