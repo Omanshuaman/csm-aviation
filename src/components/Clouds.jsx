@@ -20,14 +20,15 @@ function CloudsGroup() {
       y: { value: 1, min: 0, max: 100, step: 1 },
       z: { value: 1, min: 0, max: 100, step: 1 },
       color: "white",
-      positionx: { value: 0, min: -100, max: 100, step: 1 },
-      positiony: { value: 0, min: -100, max: 100, step: 1 },
-      positionz: { value: -10, min: -100, max: 100, step: 1 },
+      positionx: { value: -12, min: -100, max: 100, step: 1 },
+      positiony: { value: -28, min: -100, max: 100, step: 1 },
+      positionz: { value: -31, min: -100, max: 100, step: 1 },
     });
 
   useFrame((state, delta) => {
-    ref.current.rotation.y = Math.cos(state.clock.elapsedTime / 2) / 32;
-    ref.current.rotation.x = Math.sin(state.clock.elapsedTime / 2) / 32;
+    const time = state.clock.getElapsedTime();
+    ref.current.rotation.x = Math.sin(time * 0.1) * 0.05;
+    ref.current.rotation.y = Math.cos(time * 0.1) * 0.05;
   });
   return (
     <>
