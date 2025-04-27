@@ -36,9 +36,10 @@ export const Experience = () => {
   const shape = useMemo(() => {
     return new THREE.Shape().moveTo(0, -0.2).lineTo(0, 0.2);
   }, []);
+  const isProduction = window.location.protocol === "https:";
   return (
     <>
-      <Perf position="top-left" />
+      {!isProduction && <Perf position="top-left" />}
       <OrbitControls enableZoom={false} />
       <ambientLight intensity={Math.PI / 3} />
       <Float floatIntensity={2} rotationIntensity={0} speed={2}>
