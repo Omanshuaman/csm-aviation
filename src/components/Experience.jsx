@@ -1,16 +1,16 @@
-import { Float, CameraControls, Line, OrbitControls } from "@react-three/drei";
-import { Jet } from "./Jet";
-import { Sky } from "@react-three/drei";
+import { Float, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import CloudsGroup from "./Clouds";
 import { Perf } from "r3f-perf";
 import { Background } from "./Background";
 import { useMemo } from "react";
+import { Airplane } from "./Airplane";
 const LINE_NB_POINTS = 200;
 export const Experience = () => {
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(
       [
+        new THREE.Vector3(0, 0, 5),
         new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(0, 0, -10),
         new THREE.Vector3(-2, 0, -20),
@@ -40,12 +40,16 @@ export const Experience = () => {
   return (
     <>
       {!isProduction && <Perf position="top-left" />}
-      <OrbitControls enableZoom={false} />
+      <OrbitControls />
       <ambientLight intensity={Math.PI / 3} />
       <Float floatIntensity={2} rotationIntensity={0} speed={2}>
-        <Jet scale={0.4} rotation-y={Math.PI * 1} rotation-x={Math.PI * 0.01} />
+        <Airplane
+          scale={0.002}
+          rotation-y={Math.PI * 1}
+          rotation-x={Math.PI * 0.01}
+        />
       </Float>
-      <group position-y={-2}>
+      <group position-y={-4}>
         {/* <Line
           points={linePoints}
           color="lightblue"
