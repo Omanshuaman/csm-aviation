@@ -17,27 +17,28 @@ export const Experience = () => {
     return new THREE.CatmullRomCurve3(
       [
         new THREE.Vector3(0, 0, 10),
-        new THREE.Vector3(5, 0, 0),
-        new THREE.Vector3(-5, 0, -10),
-        new THREE.Vector3(-10, 0, -20),
-        new THREE.Vector3(-15, 0, -30),
+
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(-2, 0, -10),
+        new THREE.Vector3(-5, 0, -20),
+        new THREE.Vector3(-4, 0, -30),
         new THREE.Vector3(0, 0, -40),
-        new THREE.Vector3(10, 0, -50),
-        new THREE.Vector3(15, 0, -60),
-        new THREE.Vector3(10, 0, -70),
+        new THREE.Vector3(5, 0, -50),
+        new THREE.Vector3(7, 0, -60),
+        new THREE.Vector3(5, 0, -70),
         new THREE.Vector3(0, 0, -80),
-        new THREE.Vector3(-5, 0, -90),
+        new THREE.Vector3(0, 0, -90),
         new THREE.Vector3(0, 0, -100),
-        new THREE.Vector3(5, 0, -150),
-        new THREE.Vector3(-5, 0, -200),
-        new THREE.Vector3(0, 0, -250),
-        new THREE.Vector3(10, 0, -300),
+        new THREE.Vector3(5, 0, -110),
+        new THREE.Vector3(5, 0, -130),
+        new THREE.Vector3(10, 0, -140),
       ],
       false,
       "catmullrom",
-      0.5
+      0.5 // Max tension for very smooth large curves
     );
   }, []);
+
   const linePoints = useMemo(() => {
     return curve.getPoints(LINE_NB_POINTS);
   }, [curve]);
@@ -48,16 +49,31 @@ export const Experience = () => {
   const isProduction = window.location.protocol === "https:";
   const cameraGroup = useRef();
   const scroll = useScroll();
-  useFrame((state, delta) => {
+  useFrame((_state, delta) => {
     const curPointIndex = Math.min(
       Math.round(scroll.offset * linePoints.length),
       linePoints.length - 1
     );
     const curPoint = linePoints[curPointIndex];
-    console.log("curPointIndex", curPointIndex, "curPoint", curPoint);
+    const pointAhead =
+      linePoints[Math.min(curPointIndex + 1, linePoints.length - 1)];
 
+    const xDisplacement = pointAhead.x - curPoint.x * 80;
+    const angleRotation =
+      (xDisplacement < 0 ? 1 : -1) *
+      Math.min(Math.abs(xDisplacement), Math.PI / 12);
+    const targetAirplaneQuaternion = new THREE.Quaternion().setFromEuler(
+      new THREE.Euler(
+        airplane.current.rotation.x,
+        airplane.current.rotation.y,
+        angleRotation
+      )
+    );
+    airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
     cameraGroup.current.position.lerp(curPoint, delta * 24);
   });
+
+  const airplane = useRef();
 
   return (
     <>
@@ -66,13 +82,15 @@ export const Experience = () => {
       <group ref={cameraGroup}>
         <PerspectiveCamera position={[0, 1, 5]} fov={75} makeDefault />
         <ambientLight intensity={Math.PI / 3} />
-        <Float floatIntensity={2} rotationIntensity={0} speed={2}>
-          <Airplane
-            scale={0.002}
-            rotation-y={Math.PI * 1}
-            rotation-x={Math.PI * 0.01}
-          />
-        </Float>
+        <group ref={airplane}>
+          <Float floatIntensity={2} rotationIntensity={0} speed={2}>
+            <Airplane
+              scale={0.002}
+              rotation-y={Math.PI * 1}
+              rotation-x={Math.PI * 0.01}
+            />
+          </Float>
+        </group>
       </group>
 
       <group position-y={-5}>
