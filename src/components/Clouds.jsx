@@ -38,17 +38,13 @@ function CloudsGroup() {
     <>
       <group ref={ref}>
         <Clouds material={THREE.MeshLambertMaterial} limit={400} range={range}>
-          {/* <Cloud
-            color="#ffccdd"
-            seed={2}
-            position={[
-              positionx * Math.random(),
-              positiony * Math.random(),
-              positionz * Math.random(),
-            ]}
-            volume={80}
-            bounds={60}
-          /> */}
+          <Cloud
+            color={color}
+            seed={3}
+            position={[-7, -14, -48]}
+            volume={50}
+            bounds={11}
+          />
           <Cloud
             color={color}
             seed={seed}

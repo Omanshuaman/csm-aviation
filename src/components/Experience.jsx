@@ -106,7 +106,21 @@ export const Experience = () => {
           </Float>
         </group>
       </group>
-
+      {/* <group position-y={-5}>
+        <mesh>
+          <extrudeGeometry
+            args={[
+              shape,
+              {
+                steps: LINE_NB_POINTS,
+                bevelEnabled: false,
+                extrudePath: curve,
+              },
+            ]}>
+            <meshStandardMaterial color="lightblue" opacity={0.7} transparent />
+          </extrudeGeometry>
+        </mesh>
+      </group> */}
       <Background />
       {isProduction && <AudioComponent />}
 
