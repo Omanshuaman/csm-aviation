@@ -83,7 +83,7 @@ export const Experience = () => {
         angleRotation
       )
     );
-    airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
+    airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta);
     cameraGroup.current.position.lerp(curPoint, delta * 24);
   });
 
@@ -108,7 +108,8 @@ export const Experience = () => {
       </group>
 
       <Background />
-      <AudioComponent />
+      {isProduction && <AudioComponent />}
+
       <CloudsGroup />
     </>
   );
