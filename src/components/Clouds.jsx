@@ -16,15 +16,13 @@ function CloudsGroup() {
     volume,
     bounds,
     color,
+    opacity,
   } = useControls("clouds", {
     seed: { value: 3, min: 1, max: 100, step: 1 },
     bounds: { value: 794, min: 1, max: 1000, step: 1 },
     segments: { value: 20, min: 1, max: 80, step: 1 },
     volume: { value: 530, min: 0, max: 1000, step: 10 },
     opacity: { value: 0.8, min: 0, max: 1, step: 0.01 },
-    fade: { value: 10, min: 0, max: 400, step: 1 },
-    growth: { value: 100, min: 0, max: 20, step: 1 },
-    speed: { value: 0.1, min: 0, max: 1, step: 0.01 },
     color: "white",
     positionx: { value: -7, min: -100, max: 100, step: 1 },
     positiony: { value: 50, min: -100, max: 100, step: 1 },
@@ -57,6 +55,7 @@ function CloudsGroup() {
             position={[positionx, positiony, positionz]}
             volume={volume}
             bounds={bounds}
+            opacity={opacity}
           />
         </Clouds>
       </group>
