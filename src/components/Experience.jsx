@@ -18,20 +18,32 @@ export const Experience = () => {
       [
         new THREE.Vector3(0, 0, 10),
 
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(-2, 0, -10),
-        new THREE.Vector3(-5, 0, -20),
-        new THREE.Vector3(-4, 0, -30),
-        new THREE.Vector3(0, 0, -40),
-        new THREE.Vector3(5, 0, -50),
-        new THREE.Vector3(7, 0, -60),
-        new THREE.Vector3(5, 0, -70),
+        new THREE.Vector3(-1, 0, 0),
+        new THREE.Vector3(0, 0, -10),
+        new THREE.Vector3(1, 0, -20),
+        new THREE.Vector3(0, 0, -30),
+        new THREE.Vector3(-1, 0, -40),
+        new THREE.Vector3(0, 0, -50),
+        new THREE.Vector3(-1, 0, -60),
+        new THREE.Vector3(0, 0, -70),
         new THREE.Vector3(0, 0, -80),
         new THREE.Vector3(0, 0, -90),
         new THREE.Vector3(0, 0, -100),
-        new THREE.Vector3(5, 0, -110),
-        new THREE.Vector3(5, 0, -130),
-        new THREE.Vector3(10, 0, -140),
+        new THREE.Vector3(0, 0, -110),
+        new THREE.Vector3(0, 0, -120),
+        new THREE.Vector3(0, 0, -130),
+        new THREE.Vector3(0, 0, -140),
+        new THREE.Vector3(0, 0, -150),
+        new THREE.Vector3(0, 0, -160),
+        new THREE.Vector3(0, 0, -170),
+        new THREE.Vector3(0, 0, -180),
+        new THREE.Vector3(0, 0, -190),
+        new THREE.Vector3(0, 0, -200),
+        new THREE.Vector3(0, 0, -210),
+        new THREE.Vector3(0, 0, -220),
+        new THREE.Vector3(0, 0, -230),
+        new THREE.Vector3(0, 0, -240),
+        new THREE.Vector3(0, 0, -250),
       ],
       false,
       "catmullrom",
@@ -61,7 +73,7 @@ export const Experience = () => {
     const xDisplacement = pointAhead.x - curPoint.x * 80;
     const angleRotation =
       (xDisplacement < 0 ? 1 : -1) *
-      Math.min(Math.abs(xDisplacement), Math.PI / 12);
+      Math.min(Math.abs(xDisplacement), Math.PI / 52);
     const targetAirplaneQuaternion = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
         airplane.current.rotation.x,
@@ -91,29 +103,6 @@ export const Experience = () => {
             />
           </Float>
         </group>
-      </group>
-
-      <group position-y={-5}>
-        {/* <Line
-          points={linePoints}
-          color="lightblue"
-          linewidth={16}
-          opacity={0.7}
-          transparent
-        /> */}
-        <mesh>
-          <extrudeGeometry
-            args={[
-              shape,
-              {
-                steps: LINE_NB_POINTS,
-                bevelEnabled: false,
-                extrudePath: curve,
-              },
-            ]}>
-            <meshStandardMaterial color="lightblue" opacity={0.7} transparent />
-          </extrudeGeometry>
-        </mesh>
       </group>
 
       <Background />

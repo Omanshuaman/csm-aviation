@@ -20,7 +20,7 @@ function CloudsGroup() {
       color: "white",
       positionx: { value: -7, min: -100, max: 100, step: 1 },
       positiony: { value: 50, min: -100, max: 100, step: 1 },
-      positionz: { value: -300, min: -300, max: 100, step: 1 },
+      positionz: { value: -300, min: -500, max: 100, step: 1 },
     });
 
   useFrame((state, delta) => {

@@ -9,7 +9,7 @@ export const Background = () => {
   return (
     <>
       <Environment preset="sunset" />
-      <Sphere scale={[500, 500, 500]} rotation-y={Math.PI / 2}>
+      <Sphere scale={[700, 700, 700]} rotation-y={Math.PI / 2}>
         <LayerMaterial
           lighting="physical"
           transmission={1}
