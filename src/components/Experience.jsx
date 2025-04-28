@@ -1,16 +1,23 @@
-import { Float, OrbitControls } from "@react-three/drei";
+import {
+  Float,
+  OrbitControls,
+  PerspectiveCamera,
+  useScroll,
+} from "@react-three/drei";
 import * as THREE from "three";
 import CloudsGroup from "./Clouds";
 import { Perf } from "r3f-perf";
 import { Background } from "./Background";
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import { Airplane } from "./Airplane";
-const LINE_NB_POINTS = 200;
+import { useFrame } from "@react-three/fiber";
+const LINE_NB_POINTS = 2000;
 export const Experience = () => {
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(
       [
-        new THREE.Vector3(0, 0, 5),
+        new THREE.Vector3(0, 0, 10),
+
         new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(0, 0, -10),
         new THREE.Vector3(-2, 0, -20),
@@ -28,28 +35,43 @@ export const Experience = () => {
       0.5
     );
   }, []);
-
-  // const linePoints = useMemo(() => {
-  //   return curve.getPoints(LINE_NB_POINTS);
-  // }, [curve]);
+  const linePoints = useMemo(() => {
+    return curve.getPoints(LINE_NB_POINTS);
+  }, [curve]);
 
   const shape = useMemo(() => {
     return new THREE.Shape().moveTo(0, -0.2).lineTo(0, 0.2);
   }, []);
   const isProduction = window.location.protocol === "https:";
+  const cameraGroup = useRef();
+  const scroll = useScroll();
+  useFrame((state, delta) => {
+    const curPointIndex = Math.min(
+      Math.round(scroll.offset * linePoints.length),
+      linePoints.length - 1
+    );
+    const curPoint = linePoints[curPointIndex];
+    console.log("curPointIndex", curPointIndex, "curPoint", curPoint);
+
+    cameraGroup.current.position.lerp(curPoint, delta * 24);
+  });
+
   return (
     <>
       {!isProduction && <Perf position="top-left" />}
-      <OrbitControls />
-      <ambientLight intensity={Math.PI / 3} />
-      <Float floatIntensity={2} rotationIntensity={0} speed={2}>
-        <Airplane
-          scale={0.002}
-          rotation-y={Math.PI * 1}
-          rotation-x={Math.PI * 0.01}
-        />
-      </Float>
-      <group position-y={-4}>
+      <group ref={cameraGroup}>
+        <PerspectiveCamera position={[0, 1, 5]} fov={75} makeDefault />
+        <ambientLight intensity={Math.PI / 3} />
+        <Float floatIntensity={2} rotationIntensity={0} speed={2}>
+          <Airplane
+            scale={0.002}
+            rotation-y={Math.PI * 1}
+            rotation-x={Math.PI * 0.01}
+          />
+        </Float>
+      </group>
+
+      <group position-y={-5}>
         {/* <Line
           points={linePoints}
           color="lightblue"

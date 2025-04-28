@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <Leva collapsed />
-      <Canvas camera={{ position: [0, 1, 5], fov: 75 }}>
+      <Canvas>
         <color attach="background" args={["#ececec"]} />
         <ScrollControls pages={5} damping={0.3}>
           <Experience />
