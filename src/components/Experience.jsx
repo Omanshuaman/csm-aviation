@@ -8,9 +8,11 @@ import * as THREE from "three";
 import CloudsGroup from "./Clouds";
 import { Perf } from "r3f-perf";
 import { Background } from "./Background";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Airplane } from "./Airplane";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
+import { Color, AudioListener, AudioLoader, Audio } from "three";
+
 const LINE_NB_POINTS = 2000;
 export const Experience = () => {
   const curve = useMemo(() => {
@@ -106,8 +108,29 @@ export const Experience = () => {
       </group>
 
       <Background />
-
+      <AudioComponent />
       <CloudsGroup />
     </>
   );
 };
+function AudioComponent() {
+  const { camera } = useThree();
+  useEffect(() => {
+    const listener = new AudioListener();
+    camera.add(listener);
+    const sound = new Audio(listener);
+    const audioLoader = new AudioLoader();
+
+    audioLoader.load("/sound.mp3", (buffer) => {
+      sound.setBuffer(buffer);
+      sound.setLoop(true);
+      sound.setVolume(0.4);
+      const handleClick = () => {
+        sound.play();
+      };
+      window.addEventListener("click", handleClick);
+    });
+  }, []);
+
+  return null;
+}
