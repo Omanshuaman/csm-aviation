@@ -29,11 +29,11 @@ function CloudsGroup() {
     positionz: { value: -300, min: -500, max: 100, step: 1 },
   });
 
-  useFrame((state, delta) => {
-    const time = state.clock.getElapsedTime();
-    ref.current.rotation.x = Math.sin(time * 0.1) * 0.2;
-    ref.current.rotation.y = Math.cos(time * 0.1) * 0.2;
-  });
+  // useFrame((state, delta) => {
+  //   const time = state.clock.getElapsedTime();
+  //   ref.current.rotation.x = Math.sin(time * 0.1) * 0.2;
+  //   ref.current.rotation.y = Math.cos(time * 0.1) * 0.2;
+  // });
   return (
     <>
       <group ref={ref}>
