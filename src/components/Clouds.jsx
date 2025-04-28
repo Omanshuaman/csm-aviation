@@ -23,7 +23,7 @@ function CloudsGroup() {
     segments: { value: 20, min: 1, max: 80, step: 1 },
     volume: { value: 530, min: 0, max: 1000, step: 10 },
     opacity: { value: 0.8, min: 0, max: 1, step: 0.01 },
-    color: "white",
+    color: "#baadad",
     positionx: { value: -7, min: -100, max: 100, step: 1 },
     positiony: { value: 50, min: -100, max: 100, step: 1 },
     positionz: { value: -300, min: -500, max: 100, step: 1 },
