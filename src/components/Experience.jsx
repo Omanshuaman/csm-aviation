@@ -17,18 +17,21 @@ export const Experience = () => {
     return new THREE.CatmullRomCurve3(
       [
         new THREE.Vector3(0, 0, 10),
-
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0, 0, -10),
-        new THREE.Vector3(-2, 0, -20),
-        new THREE.Vector3(-3, 0, -30),
+        new THREE.Vector3(5, 0, 0),
+        new THREE.Vector3(-5, 0, -10),
+        new THREE.Vector3(-10, 0, -20),
+        new THREE.Vector3(-15, 0, -30),
         new THREE.Vector3(0, 0, -40),
-        new THREE.Vector3(5, 0, -50),
-        new THREE.Vector3(7, 0, -60),
-        new THREE.Vector3(5, 0, -70),
+        new THREE.Vector3(10, 0, -50),
+        new THREE.Vector3(15, 0, -60),
+        new THREE.Vector3(10, 0, -70),
         new THREE.Vector3(0, 0, -80),
-        new THREE.Vector3(0, 0, -90),
+        new THREE.Vector3(-5, 0, -90),
         new THREE.Vector3(0, 0, -100),
+        new THREE.Vector3(5, 0, -150),
+        new THREE.Vector3(-5, 0, -200),
+        new THREE.Vector3(0, 0, -250),
+        new THREE.Vector3(10, 0, -300),
       ],
       false,
       "catmullrom",
@@ -58,6 +61,7 @@ export const Experience = () => {
 
   return (
     <>
+      {/* <OrbitControls /> */}
       {!isProduction && <Perf position="top-left" />}
       <group ref={cameraGroup}>
         <PerspectiveCamera position={[0, 1, 5]} fov={75} makeDefault />

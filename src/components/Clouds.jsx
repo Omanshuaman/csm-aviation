@@ -7,46 +7,48 @@ import { useFrame } from "@react-three/fiber";
 function CloudsGroup() {
   const ref = useRef();
   const cloud0 = useRef();
-  const { color, x, y, z, range, positionx, positiony, positionz } =
+  const { range, positionx, positiony, positionz, seed, volume, bounds } =
     useControls("clouds", {
-      seed: { value: 1, min: 1, max: 100, step: 1 },
+      seed: { value: 3, min: 1, max: 100, step: 1 },
+      bounds: { value: 794, min: 1, max: 1000, step: 1 },
       segments: { value: 20, min: 1, max: 80, step: 1 },
-      volume: { value: 6, min: 0, max: 100, step: 0.1 },
+      volume: { value: 530, min: 0, max: 1000, step: 10 },
       opacity: { value: 0.8, min: 0, max: 1, step: 0.01 },
       fade: { value: 10, min: 0, max: 400, step: 1 },
       growth: { value: 100, min: 0, max: 20, step: 1 },
       speed: { value: 0.1, min: 0, max: 1, step: 0.01 },
-      x: { value: 6, min: 0, max: 100, step: 1 },
-      y: { value: 1, min: 0, max: 100, step: 1 },
-      z: { value: 1, min: 0, max: 100, step: 1 },
       color: "white",
-      positionx: { value: -12, min: -100, max: 100, step: 1 },
-      positiony: { value: -28, min: -100, max: 100, step: 1 },
-      positionz: { value: -31, min: -100, max: 100, step: 1 },
+      positionx: { value: -7, min: -100, max: 100, step: 1 },
+      positiony: { value: 50, min: -100, max: 100, step: 1 },
+      positionz: { value: -300, min: -300, max: 100, step: 1 },
     });
 
   useFrame((state, delta) => {
     const time = state.clock.getElapsedTime();
-    ref.current.rotation.x = Math.sin(time * 0.1) * 0.05;
-    ref.current.rotation.y = Math.cos(time * 0.1) * 0.05;
+    ref.current.rotation.x = Math.sin(time * 0.1) * 0.2;
+    ref.current.rotation.y = Math.cos(time * 0.1) * 0.2;
   });
   return (
     <>
       <group ref={ref}>
         <Clouds material={THREE.MeshLambertMaterial} limit={400} range={range}>
-          <Cloud
+          {/* <Cloud
             color="#ffccdd"
             seed={2}
+            position={[
+              positionx * Math.random(),
+              positiony * Math.random(),
+              positionz * Math.random(),
+            ]}
+            volume={80}
+            bounds={60}
+          /> */}
+          <Cloud
+            color="#ffccdd"
+            seed={seed}
             position={[positionx, positiony, positionz]}
-            volume={10}
-            bounds={40}
-          />
-          <Cloud
-            color="#ffccdd"
-            seed={2}
-            position={[positionx + 20, positiony + 4, positionz - 30]}
-            volume={50}
-            bounds={40}
+            volume={volume}
+            bounds={bounds}
           />
         </Clouds>
       </group>
