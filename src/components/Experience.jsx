@@ -139,7 +139,7 @@ function AudioComponent() {
     audioLoader.load("/sound.mp3", (buffer) => {
       sound.setBuffer(buffer);
       sound.setLoop(true);
-      sound.setVolume(0.4);
+      sound.setVolume(0.2);
       const handleClick = () => {
         sound.play();
       };
