@@ -13,12 +13,15 @@
     "@react-three/drei": "^9.56.28",
     "@react-three/fiber": "^8.11.5",
     "@react-three/postprocessing": "^2.7.1",
+    "@tailwindcss/vite": "^4.1.4",
+    "framer-motion": "^12.9.2",
     "gsap": "^3.11.5",
     "lamina": "^1.1.23",
     "leva": "^0.10.0",
     "r3f-perf": "^7.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tailwindcss": "^4.1.4",
     "three": "^0.150.1"
   },
   "devDependencies": {

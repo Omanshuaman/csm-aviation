@@ -20,13 +20,13 @@ export const Experience = () => {
       [
         new THREE.Vector3(0, 0, 10),
 
-        new THREE.Vector3(-1, 0, 0),
+        new THREE.Vector3(0, 0, 0),
         new THREE.Vector3(0, 0, -10),
-        new THREE.Vector3(1, 0, -20),
+        new THREE.Vector3(0, 0, -20),
         new THREE.Vector3(0, 0, -30),
-        new THREE.Vector3(-1, 0, -40),
+        new THREE.Vector3(0, 0, -40),
         new THREE.Vector3(0, 0, -50),
-        new THREE.Vector3(-1, 0, -60),
+        new THREE.Vector3(0, 0, -60),
         new THREE.Vector3(0, 0, -70),
         new THREE.Vector3(0, 0, -80),
         new THREE.Vector3(0, 0, -90),
