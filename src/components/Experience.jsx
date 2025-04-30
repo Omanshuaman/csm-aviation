@@ -21,6 +21,7 @@ import { Cloud } from "./Cloud";
 
 import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 import { CloudTest } from "./TestCloud";
+import { Fog } from "three";
 const isProduction = window.location.protocol === "https:";
 const LINE_NB_POINTS = 1000;
 const CURVE_DISTANCE = 250;
@@ -96,11 +97,9 @@ Your gateway to luxury air travel.`,
   const clouds = useMemo(
     () => [
       // STARTING
+
       {
-        position: new Vector3(-3.5, -3.2, -7),
-      },
-      {
-        position: new Vector3(3.5, -4, -10),
+        position: new Vector3(3.5, -4, -20),
       },
       {
         scale: new Vector3(4, 4, 4),
@@ -427,6 +426,8 @@ Your gateway to luxury air travel.`,
     tl.current.pause();
   }, []);
 
+  const { scene } = useThree();
+
   return (
     <>
       {/* <OrbitControls /> */}
@@ -435,13 +436,13 @@ Your gateway to luxury air travel.`,
         <Background backgroundColors={backgroundColors} />
 
         <group ref={cameraRail}>
-          <PerspectiveCamera position={[0, 1, 5]} fov={75} makeDefault />
+          <PerspectiveCamera position={[0, 1, 4]} fov={75} makeDefault />
         </group>
         <ambientLight intensity={Math.PI / 6} />
         <group ref={airplane}>
           <Float floatIntensity={3} rotationIntensity={0} speed={3}>
             <Airplane
-              scale={0.002}
+              scale={0.0015}
               rotation-y={Math.PI * 1}
               rotation-x={Math.PI * 0.01}
             />
@@ -489,8 +490,11 @@ Your gateway to luxury air travel.`,
       </group>
       {/* CLOUDS */}
       {clouds.map((cloud, index) => (
-        <CloudTest {...cloud} key={index} />
+        <CloudTest {...cloud} key={index} scale={4} />
       ))}
+      {/* {clouds.map((cloud, index) => (
+        <CloudsGroup {...cloud} opacity={Math.random()} key={index} />
+      ))} */}
       {/* <CloudsGroup /> */}
     </>
   );

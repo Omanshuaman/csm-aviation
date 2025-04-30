@@ -29,7 +29,8 @@ function CloudsGroup({ ...props }) {
 
   useFrame((state, delta) => {
     const time = state.clock.getElapsedTime();
-    ref.current.rotation.x = Math.sin(time * 0.1) * 0.01;
+    ref.current.rotation.x = Math.sin(time * 0.1) * 0.05;
+    ref.current.rotation.y = Math.sin(time * 0.1) * 0.05;
   });
   return (
     <>

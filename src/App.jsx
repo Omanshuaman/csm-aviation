@@ -11,7 +11,7 @@ function App() {
       <Leva collapsed />
       <Canvas>
         <color attach="background" args={["#ececec"]} />
-        <ScrollControls pages={50} damping={0.4}>
+        <ScrollControls pages={50} damping={0.2}>
           <Experience />
           {/* <Scroll html>
             <Interface />
