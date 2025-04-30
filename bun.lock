@@ -9,7 +9,7 @@
         "@react-three/postprocessing": "^2.7.1",
         "@tailwindcss/vite": "^4.1.4",
         "framer-motion": "^12.9.2",
-        "gsap": "^3.11.5",
+        "gsap": "^3.12.7",
         "lamina": "^1.1.23",
         "leva": "^0.10.0",
         "r3f-perf": "^7.2.3",

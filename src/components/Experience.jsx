@@ -2,102 +2,444 @@ import {
   Float,
   OrbitControls,
   PerspectiveCamera,
+  Text,
   useScroll,
 } from "@react-three/drei";
 import * as THREE from "three";
+import { Euler, Group, Vector3 } from "three";
+import { gsap } from "gsap";
+
 import CloudsGroup from "./Clouds";
 import { Perf } from "r3f-perf";
 import { Background } from "./Background";
-import { useEffect, useMemo, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import { Airplane } from "./Airplane";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Color, AudioListener, AudioLoader, Audio } from "three";
+import { TextSection } from "./TextSection";
+import { Cloud } from "./Cloud";
 
-const LINE_NB_POINTS = 2000;
+import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
+import { CloudTest } from "./TestCloud";
+const isProduction = window.location.protocol === "https:";
+const LINE_NB_POINTS = 1000;
+const CURVE_DISTANCE = 250;
+const CURVE_AHEAD_CAMERA = 0.008;
+const CURVE_AHEAD_AIRPLANE = 0.02;
+const AIRPLANE_MAX_ANGLE = 35;
+const FRICTION_DISTANCE = 42;
+
 export const Experience = () => {
-  const curve = useMemo(() => {
-    return new THREE.CatmullRomCurve3(
-      [
-        new THREE.Vector3(0, 0, 10),
+  const curvePoints = useMemo(
+    () => [
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(0, 0, -CURVE_DISTANCE),
+      new THREE.Vector3(100, 0, -2 * CURVE_DISTANCE),
+      new THREE.Vector3(-100, 0, -3 * CURVE_DISTANCE),
+      new THREE.Vector3(100, 0, -4 * CURVE_DISTANCE),
+      new THREE.Vector3(0, 0, -5 * CURVE_DISTANCE),
+      new THREE.Vector3(0, 0, -6 * CURVE_DISTANCE),
+      new THREE.Vector3(0, 0, -7 * CURVE_DISTANCE),
+    ],
+    []
+  );
 
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(0, 0, -10),
-        new THREE.Vector3(0, 0, -20),
-        new THREE.Vector3(0, 0, -30),
-        new THREE.Vector3(0, 0, -40),
-        new THREE.Vector3(0, 0, -50),
-        new THREE.Vector3(0, 0, -60),
-        new THREE.Vector3(0, 0, -70),
-        new THREE.Vector3(0, 0, -80),
-        new THREE.Vector3(0, 0, -90),
-        new THREE.Vector3(0, 0, -100),
-        new THREE.Vector3(0, 0, -110),
-        new THREE.Vector3(0, 0, -120),
-        new THREE.Vector3(0, 0, -130),
-        new THREE.Vector3(0, 0, -140),
-        new THREE.Vector3(0, 0, -150),
-        new THREE.Vector3(0, 0, -160),
-        new THREE.Vector3(0, 0, -170),
-        new THREE.Vector3(0, 0, -180),
-        new THREE.Vector3(0, 0, -190),
-        new THREE.Vector3(0, 0, -200),
-        new THREE.Vector3(0, 0, -210),
-        new THREE.Vector3(0, 0, -220),
-        new THREE.Vector3(0, 0, -230),
-        new THREE.Vector3(0, 0, -240),
-        new THREE.Vector3(0, 0, -250),
-      ],
-      false,
-      "catmullrom",
-      0.5 // Max tension for very smooth large curves
-    );
+  const curve = useMemo(() => {
+    return new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.5);
   }, []);
 
-  const linePoints = useMemo(() => {
-    return curve.getPoints(LINE_NB_POINTS);
-  }, [curve]);
+  const textSections = useMemo(() => {
+    return [
+      {
+        cameraRailDist: -1,
+        position: new Vector3(
+          curvePoints[1].x - 3,
+          curvePoints[1].y,
+          curvePoints[1].z
+        ),
+        subtitle: `Welcome to CSM Aviation,
+Your gateway to luxury air travel.`,
+      },
+      {
+        cameraRailDist: 1.5,
+        position: new Vector3(
+          curvePoints[2].x + 2,
+          curvePoints[2].y,
+          curvePoints[2].z
+        ),
+        title: "Charter Services",
+        subtitle: `Experience 24/7 on-demand private jet charters, offering direct flights from Central California to destinations across the U.S., including Las Vegas and Reno.`,
+      },
+      {
+        cameraRailDist: -1,
+        position: new Vector3(
+          curvePoints[3].x - 3,
+          curvePoints[3].y,
+          curvePoints[3].z
+        ),
+        title: "Medical Charter",
+        subtitle: `Providing medevac air charter services to the Organ Donor community for over ten years, ensuring critical transportation with a perfect safety record.`,
+      },
+      {
+        cameraRailDist: 1.5,
+        position: new Vector3(
+          curvePoints[4].x + 3.5,
+          curvePoints[4].y,
+          curvePoints[4].z - 12
+        ),
+        title: "Popular Destinations",
+        subtitle: `Beyond First Class. Beyond Expectation. Safely There. Discover seamless and luxurious private jet charters to your global destinations, knowing your journey with CSM Aviation is underpinned by the highest safety standards.`,
+      },
+    ];
+  }, []);
+
+  const clouds = useMemo(
+    () => [
+      // STARTING
+      {
+        position: new Vector3(-3.5, -3.2, -7),
+      },
+      {
+        position: new Vector3(3.5, -4, -10),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(-18, 0.2, -68),
+        rotation: new Euler(-Math.PI / 5, Math.PI / 6, 0),
+      },
+      {
+        scale: new Vector3(2.5, 2.5, 2.5),
+        position: new Vector3(10, -1.2, -52),
+      },
+      // FIRST POINT
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[1].x + 10,
+          curvePoints[1].y - 4,
+          curvePoints[1].z + 64
+        ),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[1].x - 20,
+          curvePoints[1].y + 4,
+          curvePoints[1].z + 28
+        ),
+        rotation: new Euler(0, Math.PI / 7, 0),
+      },
+      {
+        rotation: new Euler(0, Math.PI / 7, Math.PI / 5),
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[1].x - 13,
+          curvePoints[1].y + 4,
+          curvePoints[1].z - 62
+        ),
+      },
+      {
+        rotation: new Euler(Math.PI / 2, Math.PI / 2, Math.PI / 3),
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[1].x + 54,
+          curvePoints[1].y + 2,
+          curvePoints[1].z - 82
+        ),
+      },
+      {
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[1].x + 8,
+          curvePoints[1].y - 14,
+          curvePoints[1].z - 22
+        ),
+      },
+      // SECOND POINT
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[2].x + 6,
+          curvePoints[2].y - 7,
+          curvePoints[2].z + 50
+        ),
+      },
+      {
+        scale: new Vector3(2, 2, 2),
+        position: new Vector3(
+          curvePoints[2].x - 2,
+          curvePoints[2].y + 4,
+          curvePoints[2].z - 26
+        ),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[2].x + 12,
+          curvePoints[2].y + 1,
+          curvePoints[2].z - 86
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 3),
+      },
+      // THIRD POINT
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[3].x + 3,
+          curvePoints[3].y - 10,
+          curvePoints[3].z + 50
+        ),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[3].x - 10,
+          curvePoints[3].y,
+          curvePoints[3].z + 30
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 5),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[3].x - 20,
+          curvePoints[3].y - 5,
+          curvePoints[3].z - 8
+        ),
+        rotation: new Euler(Math.PI, 0, Math.PI / 5),
+      },
+      {
+        scale: new Vector3(5, 5, 5),
+        position: new Vector3(
+          curvePoints[3].x + 0,
+          curvePoints[3].y - 5,
+          curvePoints[3].z - 98
+        ),
+        rotation: new Euler(0, Math.PI / 3, 0),
+      },
+      // FOURTH POINT
+      {
+        scale: new Vector3(2, 2, 2),
+        position: new Vector3(
+          curvePoints[4].x + 3,
+          curvePoints[4].y - 10,
+          curvePoints[4].z + 2
+        ),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[4].x + 24,
+          curvePoints[4].y - 6,
+          curvePoints[4].z - 42
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 5),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[4].x - 4,
+          curvePoints[4].y + 9,
+          curvePoints[4].z - 62
+        ),
+        rotation: new Euler(Math.PI / 3, 0, Math.PI / 3),
+      },
+      // FINAL
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[7].x + 12,
+          curvePoints[7].y - 5,
+          curvePoints[7].z + 60
+        ),
+        rotation: new Euler(-Math.PI / 4, -Math.PI / 6, 0),
+      },
+      {
+        scale: new Vector3(3, 3, 3),
+        position: new Vector3(
+          curvePoints[7].x - 12,
+          curvePoints[7].y + 5,
+          curvePoints[7].z + 120
+        ),
+        rotation: new Euler(Math.PI / 4, Math.PI / 6, 0),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[7].x,
+          curvePoints[7].y,
+          curvePoints[7].z
+        ),
+        rotation: new Euler(0, 0, 0),
+      },
+    ],
+    []
+  );
 
   const shape = useMemo(() => {
-    return new THREE.Shape().moveTo(0, -0.2).lineTo(0, 0.2);
-  }, []);
-  const isProduction = window.location.protocol === "https:";
-  const cameraGroup = useRef();
-  const scroll = useScroll();
-  useFrame((_state, delta) => {
-    const curPointIndex = Math.min(
-      Math.round(scroll.offset * linePoints.length),
-      linePoints.length - 1
-    );
-    const curPoint = linePoints[curPointIndex];
-    const pointAhead =
-      linePoints[Math.min(curPointIndex + 1, linePoints.length - 1)];
+    const shape = new THREE.Shape();
+    shape.moveTo(0, -0.08);
+    shape.lineTo(0, 0.08);
 
-    const xDisplacement = pointAhead.x - curPoint.x * 80;
-    const angleRotation =
-      (xDisplacement < 0 ? 1 : -1) *
-      Math.min(Math.abs(xDisplacement), Math.PI / 52);
+    return shape;
+  }, [curve]);
+
+  const cameraGroup = useRef();
+  const cameraRail = useRef();
+  const scroll = useScroll();
+  const lastScroll = useRef(0);
+
+  useFrame((_state, delta) => {
+    const scrollOffset = Math.max(0, scroll.offset);
+
+    let friction = 1;
+    let resetCameraRail = true;
+    // LOOK TO CLOSE TEXT SECTIONS
+    textSections.forEach((textSection) => {
+      const distance = textSection.position.distanceTo(
+        cameraGroup.current.position
+      );
+
+      if (distance < FRICTION_DISTANCE) {
+        friction = Math.max(distance / FRICTION_DISTANCE, 0.1);
+        const targetCameraRailPosition = new Vector3(
+          (1 - distance / FRICTION_DISTANCE) * textSection.cameraRailDist,
+          0,
+          0
+        );
+        cameraRail.current.position.lerp(targetCameraRailPosition, delta);
+        resetCameraRail = false;
+      }
+    });
+    if (resetCameraRail) {
+      const targetCameraRailPosition = new Vector3(0, 0, 0);
+      cameraRail.current.position.lerp(targetCameraRailPosition, delta);
+    }
+
+    // CALCULATE LERPED SCROLL OFFSET
+    let lerpedScrollOffset = THREE.MathUtils.lerp(
+      lastScroll.current,
+      scrollOffset,
+      delta * friction
+    );
+    // PROTECT BELOW 0 AND ABOVE 1
+    lerpedScrollOffset = Math.min(lerpedScrollOffset, 1);
+    lerpedScrollOffset = Math.max(lerpedScrollOffset, 0);
+
+    lastScroll.current = lerpedScrollOffset;
+    tl.current.seek(lerpedScrollOffset * tl.current.duration());
+
+    const curPoint = curve.getPoint(lerpedScrollOffset);
+
+    // Follow the curve points
+    cameraGroup.current.position.lerp(curPoint, delta * 24);
+
+    // Make the group look ahead on the curve
+
+    const lookAtPoint = curve.getPoint(
+      Math.min(lerpedScrollOffset + CURVE_AHEAD_CAMERA, 1)
+    );
+
+    const currentLookAt = cameraGroup.current.getWorldDirection(
+      new THREE.Vector3()
+    );
+    const targetLookAt = new THREE.Vector3()
+      .subVectors(curPoint, lookAtPoint)
+      .normalize();
+
+    const lookAt = currentLookAt.lerp(targetLookAt, delta * 24);
+    cameraGroup.current.lookAt(
+      cameraGroup.current.position.clone().add(lookAt)
+    );
+
+    // Airplane rotation
+
+    const tangent = curve.getTangent(lerpedScrollOffset + CURVE_AHEAD_AIRPLANE);
+
+    const nonLerpLookAt = new Group();
+    nonLerpLookAt.position.copy(curPoint);
+    nonLerpLookAt.lookAt(nonLerpLookAt.position.clone().add(targetLookAt));
+
+    tangent.applyAxisAngle(
+      new THREE.Vector3(0, 1, 0),
+      -nonLerpLookAt.rotation.y
+    );
+
+    let angle = Math.atan2(-tangent.z, tangent.x);
+    angle = -Math.PI / 2 + angle;
+
+    let angleDegrees = (angle * 180) / Math.PI;
+    angleDegrees *= 2.4; // stronger angle
+
+    // LIMIT PLANE ANGLE
+    if (angleDegrees < 0) {
+      angleDegrees = Math.max(angleDegrees, -AIRPLANE_MAX_ANGLE);
+    }
+    if (angleDegrees > 0) {
+      angleDegrees = Math.min(angleDegrees, AIRPLANE_MAX_ANGLE);
+    }
+
+    // SET BACK ANGLE
+    angle = (angleDegrees * Math.PI) / 180;
+
     const targetAirplaneQuaternion = new THREE.Quaternion().setFromEuler(
       new THREE.Euler(
         airplane.current.rotation.x,
         airplane.current.rotation.y,
-        angleRotation
+        angle
       )
     );
-    airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta);
-    cameraGroup.current.position.lerp(curPoint, delta * 24);
+    airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
   });
 
   const airplane = useRef();
+
+  const tl = useRef();
+  const backgroundColors = useRef({
+    colorA: "#3535cc",
+    colorB: "#abaadd",
+  });
+
+  useLayoutEffect(() => {
+    tl.current = gsap.timeline();
+
+    // Day (Sky Blue)
+    tl.current.to(backgroundColors.current, {
+      duration: 1,
+      colorA: "#87ceeb", // Sky Blue
+      colorB: "#ffffff", // White clouds
+    });
+
+    // Sunset
+    tl.current.to(backgroundColors.current, {
+      duration: 1,
+      colorA: "#ffd54f", // Warm yellow
+      colorB: "#ff7043", // Orange-pink sunset
+    });
+
+    // Light Night (moonlit)
+    tl.current.to(backgroundColors.current, {
+      duration: 1,
+      colorA: "#a3bce2", // Pale moonlight blue
+      colorB: "#c1b6dd", // Soft lavender glow
+    });
+
+    tl.current.pause();
+  }, []);
 
   return (
     <>
       {/* <OrbitControls /> */}
       {!isProduction && <Perf position="top-left" />}
       <group ref={cameraGroup}>
-        <PerspectiveCamera position={[0, 1, 5]} fov={75} makeDefault />
-        <ambientLight intensity={Math.PI / 3} />
+        <Background backgroundColors={backgroundColors} />
+
+        <group ref={cameraRail}>
+          <PerspectiveCamera position={[0, 1, 5]} fov={75} makeDefault />
+        </group>
+        <ambientLight intensity={Math.PI / 6} />
         <group ref={airplane}>
-          <Float floatIntensity={2} rotationIntensity={0} speed={2}>
+          <Float floatIntensity={3} rotationIntensity={0} speed={3}>
             <Airplane
               scale={0.002}
               rotation-y={Math.PI * 1}
@@ -106,7 +448,25 @@ export const Experience = () => {
           </Float>
         </group>
       </group>
-      {/* <group position-y={-5}>
+      <group position={[-3, 0, -100]}>
+        <Text
+          color="white"
+          anchorX={"left"}
+          anchorY="middle"
+          fontSize={0.22}
+          maxWidth={2.5}
+          font={"./fonts/Inter-Regular.ttf"}>
+          Welcome to Wawatmos!{"\n"}
+          Have a seat and enjoy the ride!
+        </Text>
+      </group>
+
+      {textSections.map((textSection, index) => (
+        <TextSection {...textSection} key={index} />
+      ))}
+
+      {/* LINE */}
+      <group position-y={-5}>
         <mesh>
           <extrudeGeometry
             args={[
@@ -116,36 +476,22 @@ export const Experience = () => {
                 bevelEnabled: false,
                 extrudePath: curve,
               },
-            ]}>
-            <meshStandardMaterial color="lightblue" opacity={0.7} transparent />
-          </extrudeGeometry>
+            ]}
+          />
+          <meshStandardMaterial
+            color={"white"}
+            opacity={1}
+            transparent
+            envMapIntensity={2}
+            onBeforeCompile={fadeOnBeforeCompile}
+          />
         </mesh>
-      </group> */}
-      <Background />
-      {isProduction && <AudioComponent />}
-
-      <CloudsGroup />
+      </group>
+      {/* CLOUDS */}
+      {clouds.map((cloud, index) => (
+        <CloudTest {...cloud} key={index} />
+      ))}
+      {/* <CloudsGroup /> */}
     </>
   );
 };
-function AudioComponent() {
-  const { camera } = useThree();
-  useEffect(() => {
-    const listener = new AudioListener();
-    camera.add(listener);
-    const sound = new Audio(listener);
-    const audioLoader = new AudioLoader();
-
-    audioLoader.load("/sound.mp3", (buffer) => {
-      sound.setBuffer(buffer);
-      sound.setLoop(true);
-      sound.setVolume(0.2);
-      const handleClick = () => {
-        sound.play();
-      };
-      window.addEventListener("click", handleClick);
-    });
-  }, []);
-
-  return null;
-}
