@@ -489,13 +489,15 @@ Your gateway to luxury air travel.`,
         </mesh>
       </group>
       {/* CLOUDS */}
-      {clouds.map((cloud, index) => (
-        <CloudTest {...cloud} key={index} scale={4} />
-      ))}
       {/* {clouds.map((cloud, index) => (
-        <CloudsGroup {...cloud} opacity={Math.random()} key={index} />
+        <CloudTest {...cloud} key={index} scale={4} />
       ))} */}
+      <CloudsGroup opacity={Math.random()} />
+
       {/* <CloudsGroup /> */}
+      {/* {clouds.map((cloud, index) => (
+        <Cloud {...cloud} opacity={Math.random()} key={index} />
+      ))} */}
     </>
   );
 };
