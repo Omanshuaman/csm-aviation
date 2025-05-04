@@ -4,6 +4,7 @@ import { Leva } from "leva";
 import { Scroll, ScrollControls } from "@react-three/drei";
 import Interface from "./components/Interface";
 import { EffectComposer, Noise } from "@react-three/postprocessing";
+import { Overlay } from "./components/Overlay";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         </ScrollControls>
         <EffectComposer></EffectComposer>
       </Canvas>
+      <Overlay />
     </>
   );
 }

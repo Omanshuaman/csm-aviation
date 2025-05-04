@@ -423,6 +423,13 @@ Your gateway to luxury air travel.`,
       colorB: "#c1b6dd", // Soft lavender glow
     });
 
+    // Night Sky
+    tl.current.to(backgroundColors.current, {
+      duration: 1,
+      colorA: "#0d1b2a", // Deep navy blue
+      colorB: "#1b263b", // Slightly lighter deep blue
+    });
+
     tl.current.pause();
   }, []);
 
@@ -442,7 +449,7 @@ Your gateway to luxury air travel.`,
         <group ref={airplane}>
           <Float floatIntensity={3} rotationIntensity={0} speed={3}>
             <Airplane
-              scale={0.0015}
+              scale={0.0014}
               rotation-y={Math.PI * 1}
               rotation-x={Math.PI * 0.01}
             />
@@ -457,7 +464,7 @@ Your gateway to luxury air travel.`,
           fontSize={0.22}
           maxWidth={2.5}
           font={"./fonts/Inter-Regular.ttf"}>
-          Welcome to Wawatmos!{"\n"}
+          Welcome to CSM!{"\n"}
           Have a seat and enjoy the ride!
         </Text>
       </group>
@@ -492,12 +499,12 @@ Your gateway to luxury air travel.`,
       {/* {clouds.map((cloud, index) => (
         <CloudTest {...cloud} key={index} scale={4} />
       ))} */}
-      <CloudsGroup opacity={Math.random()} />
+      {/* <CloudsGroup opacity={Math.random()} /> */}
 
       {/* <CloudsGroup /> */}
-      {/* {clouds.map((cloud, index) => (
-        <Cloud {...cloud} opacity={Math.random()} key={index} />
-      ))} */}
+      {clouds.map((cloud, index) => (
+        <Cloud {...cloud} opacity={Math.random() + 0.1} key={index} />
+      ))}
     </>
   );
 };
