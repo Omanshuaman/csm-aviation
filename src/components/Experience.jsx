@@ -293,6 +293,7 @@ Your gateway to luxury air travel.`,
 
     let friction = 1;
     let resetCameraRail = true;
+
     // LOOK TO CLOSE TEXT SECTIONS
     textSections.forEach((textSection) => {
       const distance = textSection.position.distanceTo(
@@ -389,6 +390,14 @@ Your gateway to luxury air travel.`,
       )
     );
     airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
+
+    // Update ambient light intensity based on scroll
+    if (ambientLightRef.current) {
+      ambientLightRef.current.intensity = Math.max(
+        (Math.PI / 6) * (1 - lerpedScrollOffset),
+        0.1
+      );
+    }
   });
 
   const airplane = useRef();
@@ -398,6 +407,7 @@ Your gateway to luxury air travel.`,
     colorA: "#3535cc",
     colorB: "#abaadd",
   });
+  const ambientLightRef = useRef(); // Reference for the ambient light
 
   useLayoutEffect(() => {
     tl.current = gsap.timeline();
@@ -423,11 +433,11 @@ Your gateway to luxury air travel.`,
       colorB: "#c1b6dd", // Soft lavender glow
     });
 
-    // Night Sky
+    // Night Sky (Deep blues)
     tl.current.to(backgroundColors.current, {
       duration: 1,
-      colorA: "#0d1b2a", // Deep navy blue
-      colorB: "#1b263b", // Slightly lighter deep blue
+      colorA: "#0d1b2a", // Deep navy
+      colorB: "#1b263b", // Dimmed blue
     });
 
     tl.current.pause();
@@ -441,11 +451,10 @@ Your gateway to luxury air travel.`,
       {!isProduction && <Perf position="top-left" />}
       <group ref={cameraGroup}>
         <Background backgroundColors={backgroundColors} />
-
         <group ref={cameraRail}>
           <PerspectiveCamera position={[0, 1, 4]} fov={75} makeDefault />
         </group>
-        <ambientLight intensity={Math.PI / 6} />
+        <ambientLight ref={ambientLightRef} intensity={Math.PI / 6} />
         <group ref={airplane}>
           <Float floatIntensity={3} rotationIntensity={0} speed={3}>
             <Airplane

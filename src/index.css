@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter&display=swap");
 @font-face {
   font-family: "Fracktif-SemiBold";
   src: url("/public/fonts/Fracktif-SemiBold.woff2") format("woff2");
@@ -89,7 +88,7 @@ body {
   margin: 0;
   transform: translateY(-50%);
   position: absolute;
-  top: 40vh;
+  top: 30vh;
   animation: fadeUp 2.4s ease-in-out;
   transition: all 2s ease-in-out;
 }
@@ -100,7 +99,7 @@ body {
 
   transform: translateY(-50%);
   position: absolute;
-  top: 55vh;
+  top: 45vh;
   font-size: 1rem;
   animation: fadeUp 2.4s ease-in-out;
   transition: all 2s ease-in-out;
@@ -158,16 +157,16 @@ body {
 }
 
 .explore {
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.5rem;
   border: none;
   font-family: "Mauren-Light";
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   letter-spacing: 0.25rem;
   color: #3535cc;
   border-radius: 32px;
   cursor: pointer;
   display: inline-block;
-  margin-top: 420px;
+  margin-top: 520px;
   display: inline-block;
   background-color: aliceblue;
   position: relative;
