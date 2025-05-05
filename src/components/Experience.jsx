@@ -96,64 +96,6 @@ Your gateway to luxury air travel.`,
 
   const clouds = useMemo(
     () => [
-      // STARTING
-
-      {
-        position: new Vector3(3.5, -4, -20),
-      },
-      {
-        scale: new Vector3(4, 4, 4),
-        position: new Vector3(-18, 0.2, -68),
-        rotation: new Euler(-Math.PI / 5, Math.PI / 6, 0),
-      },
-      {
-        scale: new Vector3(2.5, 2.5, 2.5),
-        position: new Vector3(10, -1.2, -52),
-      },
-      // FIRST POINT
-      {
-        scale: new Vector3(4, 4, 4),
-        position: new Vector3(
-          curvePoints[1].x + 10,
-          curvePoints[1].y - 4,
-          curvePoints[1].z + 64
-        ),
-      },
-      {
-        scale: new Vector3(3, 3, 3),
-        position: new Vector3(
-          curvePoints[1].x - 20,
-          curvePoints[1].y + 4,
-          curvePoints[1].z + 28
-        ),
-        rotation: new Euler(0, Math.PI / 7, 0),
-      },
-      {
-        rotation: new Euler(0, Math.PI / 7, Math.PI / 5),
-        scale: new Vector3(5, 5, 5),
-        position: new Vector3(
-          curvePoints[1].x - 13,
-          curvePoints[1].y + 4,
-          curvePoints[1].z - 62
-        ),
-      },
-      {
-        rotation: new Euler(Math.PI / 2, Math.PI / 2, Math.PI / 3),
-        scale: new Vector3(5, 5, 5),
-        position: new Vector3(
-          curvePoints[1].x + 54,
-          curvePoints[1].y + 2,
-          curvePoints[1].z - 82
-        ),
-      },
-      {
-        scale: new Vector3(5, 5, 5),
-        position: new Vector3(
-          curvePoints[1].x + 8,
-          curvePoints[1].y - 14,
-          curvePoints[1].z - 22
-        ),
-      },
       // SECOND POINT
       {
         scale: new Vector3(3, 3, 3),
@@ -510,7 +452,7 @@ Your gateway to luxury air travel.`,
       ))} */}
       {/* <CloudsGroup opacity={Math.random()} /> */}
 
-      {/* <CloudsGroup /> */}
+      <CloudsGroup />
       {clouds.map((cloud, index) => (
         <Cloud {...cloud} opacity={Math.random() + 0.1} key={index} />
       ))}

@@ -20,31 +20,31 @@ function CloudsGroup({ ...props }) {
     opacity,
     scale,
   } = useControls("clouds", {
-    seed: { value: 13, min: 1, max: 100, step: 1 },
-    bounds: { value: 165, min: 1, max: 500, step: 1 },
-    volume: { value: 120, min: 0, max: 500, step: 1 },
+    seed: { value: 14, min: 1, max: 20, step: 1 },
+    bounds: { value: 255, min: 1, max: 500, step: 1 },
+    volume: { value: 233, min: 0, max: 500, step: 1 },
     opacity: { value: 1, min: 0, max: 1, step: 0.01 },
     positionx: {
-      value: 3,
+      value: 2,
       min: -100,
       max: 100,
       step: 1,
     },
     positiony: {
-      value: 100,
+      value: -100,
       min: -100,
       max: 100,
       step: 1,
     },
     positionz: {
-      value: -300,
+      value: -171,
       min: -300,
       max: 100,
       step: 1,
     },
 
     scale: {
-      value: 1,
+      value: 1.11,
       min: 0.1,
       max: 5,
       step: 0.01,
