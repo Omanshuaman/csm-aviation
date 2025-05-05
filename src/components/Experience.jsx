@@ -12,7 +12,7 @@ import { gsap } from "gsap";
 import CloudsGroup from "./Clouds";
 import { Perf } from "r3f-perf";
 import { Background } from "./Background";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import { Airplane } from "./Airplane";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Color, AudioListener, AudioLoader, Audio } from "three";
@@ -457,7 +457,9 @@ Your gateway to luxury air travel.`,
       ))} */}
         {/* <CloudsGroup opacity={Math.random()} /> */}
 
-        <CloudsGroup />
+        <Suspense fallback={null}>
+          <CloudsGroup />
+        </Suspense>
         {clouds.map((cloud, index) => (
           <Cloud {...cloud} opacity={Math.random() + 0.1} key={index} />
         ))}
