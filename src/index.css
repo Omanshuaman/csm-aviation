@@ -231,12 +231,13 @@ body {
 
 @media screen and (max-width: 768px) {
   .logo {
-    font-size: 4rem;
+    font-size: 3rem;
     letter-spacing: 0.25rem;
+    top: 36vh;
   }
   .logo--subtext {
-    top: 48vh;
-    font-size: 0.6rem;
+    top: 42vh;
+    font-size: 0.4rem;
     letter-spacing: 0.25rem;
   }
 
