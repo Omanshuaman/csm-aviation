@@ -22,6 +22,7 @@ import { Cloud } from "./Cloud";
 import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 import { CloudTest } from "./TestCloud";
 import { Fog } from "three";
+import { usePlay } from "../contexts/Play";
 const isProduction = window.location.protocol === "https:";
 const LINE_NB_POINTS = 1000;
 const CURVE_DISTANCE = 250;
@@ -229,13 +230,16 @@ Your gateway to luxury air travel.`,
   const cameraRail = useRef();
   const scroll = useScroll();
   const lastScroll = useRef(0);
+  const { play, setHasScroll, end, setEnd } = usePlay();
 
   useFrame((_state, delta) => {
     const scrollOffset = Math.max(0, scroll.offset);
 
     let friction = 1;
     let resetCameraRail = true;
-
+    if (lastScroll.current <= 0 && scroll.offset > 0) {
+      setHasScroll(true);
+    }
     // LOOK TO CLOSE TEXT SECTIONS
     textSections.forEach((textSection) => {
       const distance = textSection.position.distanceTo(
@@ -387,75 +391,78 @@ Your gateway to luxury air travel.`,
 
   const { scene } = useThree();
 
-  return (
-    <>
-      {/* <OrbitControls /> */}
-      {!isProduction && <Perf position="top-left" />}
-      <group ref={cameraGroup}>
-        <Background backgroundColors={backgroundColors} />
-        <group ref={cameraRail}>
-          <PerspectiveCamera position={[0, 1, 4]} fov={75} makeDefault />
+  return useMemo(
+    () => (
+      <>
+        {/* <OrbitControls /> */}
+        {!isProduction && <Perf position="top-left" />}
+        <group ref={cameraGroup}>
+          <Background backgroundColors={backgroundColors} />
+          <group ref={cameraRail}>
+            <PerspectiveCamera position={[0, 1, 4]} fov={75} makeDefault />
+          </group>
+          <ambientLight ref={ambientLightRef} intensity={Math.PI / 6} />
+          <group ref={airplane}>
+            <Float floatIntensity={3} rotationIntensity={0} speed={3}>
+              <Airplane
+                scale={0.0014}
+                rotation-y={Math.PI * 1}
+                rotation-x={Math.PI * 0.01}
+              />
+            </Float>
+          </group>
         </group>
-        <ambientLight ref={ambientLightRef} intensity={Math.PI / 6} />
-        <group ref={airplane}>
-          <Float floatIntensity={3} rotationIntensity={0} speed={3}>
-            <Airplane
-              scale={0.0014}
-              rotation-y={Math.PI * 1}
-              rotation-x={Math.PI * 0.01}
+        <group position={[-3, 0, -100]}>
+          <Text
+            color="white"
+            anchorX={"left"}
+            anchorY="middle"
+            fontSize={0.22}
+            maxWidth={2.5}
+            font={"./fonts/Inter-Regular.ttf"}>
+            Welcome to CSM!{"\n"}
+            Have a seat and enjoy the ride!
+          </Text>
+        </group>
+
+        {textSections.map((textSection, index) => (
+          <TextSection {...textSection} key={index} />
+        ))}
+
+        {/* LINE */}
+        <group position-y={-5}>
+          <mesh>
+            <extrudeGeometry
+              args={[
+                shape,
+                {
+                  steps: LINE_NB_POINTS,
+                  bevelEnabled: false,
+                  extrudePath: curve,
+                },
+              ]}
             />
-          </Float>
+            <meshStandardMaterial
+              color={"white"}
+              opacity={1}
+              transparent
+              envMapIntensity={2}
+              onBeforeCompile={fadeOnBeforeCompile}
+            />
+          </mesh>
         </group>
-      </group>
-      <group position={[-3, 0, -100]}>
-        <Text
-          color="white"
-          anchorX={"left"}
-          anchorY="middle"
-          fontSize={0.22}
-          maxWidth={2.5}
-          font={"./fonts/Inter-Regular.ttf"}>
-          Welcome to CSM!{"\n"}
-          Have a seat and enjoy the ride!
-        </Text>
-      </group>
-
-      {textSections.map((textSection, index) => (
-        <TextSection {...textSection} key={index} />
-      ))}
-
-      {/* LINE */}
-      <group position-y={-5}>
-        <mesh>
-          <extrudeGeometry
-            args={[
-              shape,
-              {
-                steps: LINE_NB_POINTS,
-                bevelEnabled: false,
-                extrudePath: curve,
-              },
-            ]}
-          />
-          <meshStandardMaterial
-            color={"white"}
-            opacity={1}
-            transparent
-            envMapIntensity={2}
-            onBeforeCompile={fadeOnBeforeCompile}
-          />
-        </mesh>
-      </group>
-      {/* CLOUDS */}
-      {/* {clouds.map((cloud, index) => (
+        {/* CLOUDS */}
+        {/* {clouds.map((cloud, index) => (
         <CloudTest {...cloud} key={index} scale={4} />
       ))} */}
-      {/* <CloudsGroup opacity={Math.random()} /> */}
+        {/* <CloudsGroup opacity={Math.random()} /> */}
 
-      <CloudsGroup />
-      {clouds.map((cloud, index) => (
-        <Cloud {...cloud} opacity={Math.random() + 0.1} key={index} />
-      ))}
-    </>
+        <CloudsGroup />
+        {clouds.map((cloud, index) => (
+          <Cloud {...cloud} opacity={Math.random() + 0.1} key={index} />
+        ))}
+      </>
+    ),
+    []
   );
 };
