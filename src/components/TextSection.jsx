@@ -1,7 +1,12 @@
 import { Text, RoundedBox } from "@react-three/drei";
 import { fadeOnBeforeCompileFlat } from "../utils/fadeMaterial";
+import { TextureLoader } from "three";
+import { useLoader } from "@react-three/fiber";
 
 export const TextSection = (props) => {
+  // Load the texture for the plane
+  const texture = useLoader(TextureLoader, props.texture);
+  console.log(props.texture);
   return (
     <group position={[-5, 1, -100]} {...props}>
       {/* Floating Bubble */}
@@ -17,11 +22,13 @@ export const TextSection = (props) => {
         />
       </mesh>
 
-      {/* Coral inside bubble (placeholder) */}
+      {/* Plane with texture */}
       <mesh position={[0, 2.8, 0]}>
-        <coneGeometry args={[0.3, 0.6, 12]} />
+        <planeGeometry args={[1, 1]} />
         <meshStandardMaterial
-          color="#ff9966"
+          map={texture}
+          roughness={0.3}
+          metalness={0.1}
           onBeforeCompile={fadeOnBeforeCompileFlat}
         />
       </mesh>
@@ -35,7 +42,7 @@ export const TextSection = (props) => {
         anchorY="middle"
         font="./fonts/DMSerifDisplay-Regular.ttf"
         textAlign="center">
-        Energy Levels
+        {props.title}
         <meshStandardMaterial
           color="#3e4c59"
           onBeforeCompile={fadeOnBeforeCompileFlat}
@@ -59,33 +66,15 @@ export const TextSection = (props) => {
 
       {/* Subtitle 1 */}
       <Text
-        position={[0, 0.6, 0.06]}
-        fontSize={0.12}
+        position={[0, 0.4, 0.06]}
+        fontSize={0.15}
         color="#3e4c59"
         maxWidth={2.5}
         anchorX="center"
         anchorY="middle"
         font="./fonts/DMSerifDisplay-Regular.ttf"
         textAlign="center">
-        Rich in vitamins and minerals like iron{"\n"}that increase energy
-        levels.
-        <meshStandardMaterial
-          color="#3e4c59"
-          onBeforeCompile={fadeOnBeforeCompileFlat}
-        />
-      </Text>
-
-      {/* Subtitle 2 */}
-      <Text
-        position={[0, -0.1, 0.06]}
-        fontSize={0.12}
-        color="#3e4c59"
-        maxWidth={2.5}
-        anchorX="center"
-        anchorY="middle"
-        font="./fonts/DMSerifDisplay-Regular.ttf"
-        textAlign="center">
-        Anti-inflammatory properties reduce{"\n"}risk of fatigue.
+        {props.subtitle}
         <meshStandardMaterial
           color="#3e4c59"
           onBeforeCompile={fadeOnBeforeCompileFlat}

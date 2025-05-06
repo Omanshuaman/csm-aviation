@@ -83,42 +83,36 @@ export const Experience = () => {
       {
         cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[1].x - 3,
-          curvePoints[1].y,
+          curvePoints[1].x,
+          curvePoints[1].y + 1,
           curvePoints[1].z
         ),
-        subtitle: `Welcome to CSM Aviation,
-Your gateway to luxury air travel.`,
+        texture: "/images/pilot.jpg",
+        title: "Wholesale - Jet Brokers",
+        subtitle: `24/7 Responsive Air Charter service, providing air charter solutions. From intake to booking to wheels down and final ground transportation; constant communication and transparency every step of the way is our standard routine.`,
       },
       {
         cameraRailDist: 1.5,
         position: new Vector3(
-          curvePoints[2].x + 2,
-          curvePoints[2].y,
+          curvePoints[2].x,
+          curvePoints[2].y + 1,
           curvePoints[2].z
         ),
+        texture: "/images/jetcenter.jpg",
         title: "Charter Services",
         subtitle: `Experience 24/7 on-demand private jet charters, offering direct flights from Central California to destinations across the U.S., including Las Vegas and Reno.`,
       },
       {
         cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[3].x - 3,
-          curvePoints[3].y,
+          curvePoints[3].x,
+          curvePoints[3].y + 1,
           curvePoints[3].z
         ),
+        texture: "/images/medical.jpg",
+
         title: "Medical Charter",
-        subtitle: `Providing medevac air charter services to the Organ Donor community for over ten years, ensuring critical transportation with a perfect safety record.`,
-      },
-      {
-        cameraRailDist: 1.5,
-        position: new Vector3(
-          curvePoints[4].x + 3.5,
-          curvePoints[4].y,
-          curvePoints[4].z - 12
-        ),
-        title: "Popular Destinations",
-        subtitle: `Beyond First Class. Beyond Expectation. Safely There. Discover seamless and luxurious private jet charters to your global destinations, knowing your journey with CSM Aviation is underpinned by the highest safety standards.`,
+        subtitle: `We are proud to provide medavac air charter service to the Organ Donor community; providing On-Demand Air Medical Transportation services for over ten years with a perfect safety record.`,
       },
     ];
   }, []);
