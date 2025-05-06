@@ -13,13 +13,17 @@ export const TextSection = (props) => {
           opacity={0.15}
           roughness={0.1}
           metalness={0.3}
+          onBeforeCompile={fadeOnBeforeCompileFlat}
         />
       </mesh>
 
       {/* Coral inside bubble (placeholder) */}
       <mesh position={[0, 2.8, 0]}>
         <coneGeometry args={[0.3, 0.6, 12]} />
-        <meshStandardMaterial color="#ff9966" />
+        <meshStandardMaterial
+          color="#ff9966"
+          onBeforeCompile={fadeOnBeforeCompileFlat}
+        />
       </mesh>
 
       {/* Title */}
@@ -49,6 +53,7 @@ export const TextSection = (props) => {
           transparent
           opacity={0.1}
           roughness={0.3}
+          onBeforeCompile={fadeOnBeforeCompileFlat}
         />
       </RoundedBox>
 
