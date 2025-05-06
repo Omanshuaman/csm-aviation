@@ -2,6 +2,7 @@ import {
   Float,
   OrbitControls,
   PerspectiveCamera,
+  RoundedBox,
   Text,
   useScroll,
 } from "@react-three/drei";
@@ -12,7 +13,14 @@ import { gsap } from "gsap";
 import CloudsGroup from "./Clouds";
 import { Perf } from "r3f-perf";
 import { Background } from "./Background";
-import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Airplane } from "./Airplane";
 import { useFrame, useThree } from "@react-three/fiber";
 import { Color, AudioListener, AudioLoader, Audio } from "three";
@@ -32,6 +40,7 @@ const AIRPLANE_MAX_ANGLE = 35;
 const FRICTION_DISTANCE = 42;
 
 export const Experience = () => {
+  const [avatarTexture, setAvatarTexture] = useState(null);
   const curvePoints = useMemo(
     () => [
       new THREE.Vector3(0, 0, 0),
@@ -46,6 +55,25 @@ export const Experience = () => {
     []
   );
 
+  useEffect(() => {
+    const loadTexture = async () => {
+      const texture = await new Promise((resolve, reject) => {
+        const loader = new THREE.TextureLoader();
+        loader.load(
+          "https://randomuser.me/api/portraits/lego/6.jpg", // Dummy avatar image
+          (loadedTexture) => resolve(loadedTexture),
+          undefined,
+          (error) => {
+            console.error("Error loading texture:", error);
+            reject(error);
+          }
+        );
+      });
+      setAvatarTexture(texture);
+    };
+
+    loadTexture();
+  }, []);
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.5);
   }, []);
@@ -412,24 +440,11 @@ Your gateway to luxury air travel.`,
             </Float>
           </group>
         </group>
-        <group position={[-3, 0, -100]}>
-          <Text
-            color="white"
-            anchorX={"left"}
-            anchorY="middle"
-            fontSize={0.22}
-            maxWidth={2.5}
-            font={"./fonts/Inter-Regular.ttf"}>
-            Welcome to CSM!{"\n"}
-            Have a seat and enjoy the ride!
-          </Text>
-        </group>
 
         {textSections.map((textSection, index) => (
           <TextSection {...textSection} key={index} />
         ))}
 
-        {/* LINE */}
         <group position-y={-5}>
           <mesh>
             <extrudeGeometry

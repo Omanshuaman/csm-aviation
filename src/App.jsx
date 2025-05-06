@@ -17,7 +17,7 @@ function App() {
         <color attach="background" args={["#ececec"]} />
         <ScrollControls
           pages={play && !end ? 50 : 0}
-          damping={0.5}
+          damping={0}
           style={{
             top: "10px",
             left: "0px",
