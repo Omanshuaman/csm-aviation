@@ -26,7 +26,7 @@ export const TextSection = (props) => {
       <mesh position={[0, 2.8, 0]}>
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial
-          map={texture}
+          transparent
           roughness={0.3}
           metalness={0.1}
           onBeforeCompile={fadeOnBeforeCompileFlat}

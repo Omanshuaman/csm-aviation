@@ -84,7 +84,7 @@ export const Experience = () => {
         cameraRailDist: -1,
         position: new Vector3(
           curvePoints[1].x,
-          curvePoints[1].y + 1,
+          curvePoints[1].y + 2,
           curvePoints[1].z
         ),
         texture: "/images/pilot.jpg",
@@ -95,7 +95,7 @@ export const Experience = () => {
         cameraRailDist: 1.5,
         position: new Vector3(
           curvePoints[2].x,
-          curvePoints[2].y + 1,
+          curvePoints[2].y + 2,
           curvePoints[2].z
         ),
         texture: "/images/jetcenter.jpg",
@@ -106,7 +106,7 @@ export const Experience = () => {
         cameraRailDist: -1,
         position: new Vector3(
           curvePoints[3].x,
-          curvePoints[3].y + 1,
+          curvePoints[3].y + 2,
           curvePoints[3].z
         ),
         texture: "/images/medical.jpg",
