@@ -19,7 +19,7 @@ const CURVE_DISTANCE = 250;
 const CURVE_AHEAD_CAMERA = 0.008;
 const CURVE_AHEAD_AIRPLANE = 0.02;
 const AIRPLANE_MAX_ANGLE = 35;
-const FRICTION_DISTANCE = 42;
+const FRICTION_DISTANCE = 62;
 
 export const Experience = () => {
   const curvePoints = useMemo(
@@ -49,7 +49,7 @@ export const Experience = () => {
         cameraRailDist: -1,
         position: new Vector3(
           curvePoints[1].x - 1,
-          curvePoints[1].y + 2,
+          curvePoints[1].y + 1.5,
           curvePoints[1].z
         ),
         texture: "/images/pilot.jpg",
@@ -60,7 +60,7 @@ export const Experience = () => {
         cameraRailDist: 1.5,
         position: new Vector3(
           curvePoints[2].x + 1,
-          curvePoints[2].y + 2,
+          curvePoints[2].y + 1.5,
           curvePoints[2].z
         ),
         texture: "/images/jetcenter.jpg",
@@ -71,7 +71,7 @@ export const Experience = () => {
         cameraRailDist: -1,
         position: new Vector3(
           curvePoints[3].x - 1,
-          curvePoints[3].y + 2,
+          curvePoints[3].y + 1.5,
           curvePoints[3].z
         ),
         texture: "/images/medical.jpg",
