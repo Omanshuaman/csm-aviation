@@ -228,8 +228,8 @@ export const Experience = () => {
       camera.current.position.z = 4;
     } else {
       // PORTRAIT
-      camera.current.fov = 80;
-      camera.current.position.z = 2;
+      camera.current.fov = 60;
+      camera.current.position.z = 6;
     }
 
     if (lastScroll.current <= 0 && scroll.offset > 0) {
