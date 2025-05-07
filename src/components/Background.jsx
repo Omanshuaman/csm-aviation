@@ -38,7 +38,8 @@ export const Background = ({ backgroundColors }) => {
         <Sphere
           scale={[100, 100, 100]}
           rotation-y={Math.PI / 2}
-          rotation-x={Math.PI}>
+          rotation-x={Math.PI}
+        >
           <LayerMaterial color={"#ffffff"} side={THREE.BackSide}>
             <Gradient ref={gradientEnvRef} axes={"y"} start={start} end={end} />
           </LayerMaterial>

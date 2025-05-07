@@ -20,7 +20,6 @@
   font-family: "Mauren-LightItalic";
   src: url("/public/fonts/Mauren-LightItalic.woff2") format("woff2");
 }
-
 #root {
   width: 100vw;
   height: 100vh;
@@ -78,7 +77,6 @@ body {
   flex-direction: column;
   height: 100%;
 }
-
 .logo {
   font-family: "Mauren-Light";
   color: white;
@@ -110,8 +108,6 @@ body {
   transform-origin: center top;
 }
 .intro--disappear .logo--subtext {
-  top: 80px;
-  transform: scale(0.25);
   transform-origin: center top;
   opacity: 0; /* not 2 */
 }
@@ -126,26 +122,13 @@ body {
   opacity: 0;
 }
 
-.spinner__image {
-  width: 164px;
-  height: 164px;
-  background-size: contain;
-  background-image: url("/images/wawa.svg");
-  animation: rotate 10s linear infinite;
-}
-
-.intro--disappear .spinner {
-  opacity: 1;
-  animation: fadeOut 1s ease-in-out forwards;
-}
-
 .intro__scroll {
   opacity: 0;
   color: white;
   font-size: 1rem;
   letter-spacing: 0.05rem;
   position: absolute;
-  top: 30vh;
+  top: 24vh;
 }
 
 .intro--disappear .intro__scroll {
@@ -222,7 +205,6 @@ body {
 }
 
 .outro__text {
-  font-family: "Inter", sans-serif;
   font-size: 1.5rem;
   color: white;
 }
@@ -240,13 +222,11 @@ body {
     font-size: 0.4rem;
     letter-spacing: 0.25rem;
   }
-
   .intro--disappear .logo {
     top: 24px;
     transform: scale(0.5);
     transform-origin: center top;
   }
-
   .intro--disappear .logo--subtext {
     top: 40px;
     transform: scale(0.5);

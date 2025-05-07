@@ -1,37 +1,19 @@
-import {
-  Float,
-  OrbitControls,
-  PerspectiveCamera,
-  RoundedBox,
-  Text,
-  useScroll,
-} from "@react-three/drei";
+import { Float, PerspectiveCamera, useScroll } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { gsap } from "gsap";
+import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Euler, Group, Vector3 } from "three";
-import { gsap } from "gsap";
-
-import CloudsGroup from "./Clouds";
-import { Perf } from "r3f-perf";
-import { Background } from "./Background";
-import {
-  Suspense,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Airplane } from "./Airplane";
-import { useFrame, useThree } from "@react-three/fiber";
-import { Color, AudioListener, AudioLoader, Audio } from "three";
-import { TextSection } from "./TextSection";
-import { Cloud } from "./Cloud";
-
-import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
-import { CloudTest } from "./TestCloud";
-import { Fog } from "three";
 import { usePlay } from "../contexts/Play";
+import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
+import { Airplane } from "./Airplane";
+import { Background } from "./Background";
+import { Cloud } from "./Cloud";
+import { TextSection } from "./TextSection";
 const isProduction = window.location.protocol === "https:";
+import { Perf } from "r3f-perf";
+import CloudsGroup from "./CloudGroup";
+
 const LINE_NB_POINTS = 1000;
 const CURVE_DISTANCE = 250;
 const CURVE_AHEAD_CAMERA = 0.008;
@@ -40,7 +22,6 @@ const AIRPLANE_MAX_ANGLE = 35;
 const FRICTION_DISTANCE = 42;
 
 export const Experience = () => {
-  const [avatarTexture, setAvatarTexture] = useState(null);
   const curvePoints = useMemo(
     () => [
       new THREE.Vector3(0, 0, 0),
@@ -55,25 +36,9 @@ export const Experience = () => {
     []
   );
 
-  useEffect(() => {
-    const loadTexture = async () => {
-      const texture = await new Promise((resolve, reject) => {
-        const loader = new THREE.TextureLoader();
-        loader.load(
-          "https://randomuser.me/api/portraits/lego/6.jpg", // Dummy avatar image
-          (loadedTexture) => resolve(loadedTexture),
-          undefined,
-          (error) => {
-            console.error("Error loading texture:", error);
-            reject(error);
-          }
-        );
-      });
-      setAvatarTexture(texture);
-    };
+  const sceneOpacity = useRef(0);
+  const lineMaterialRef = useRef();
 
-    loadTexture();
-  }, []);
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.5);
   }, []);
@@ -83,8 +48,8 @@ export const Experience = () => {
       {
         cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[1].x,
-          curvePoints[1].y + 2,
+          curvePoints[1].x - 3,
+          curvePoints[1].y,
           curvePoints[1].z
         ),
         texture: "/images/pilot.jpg",
@@ -94,8 +59,8 @@ export const Experience = () => {
       {
         cameraRailDist: 1.5,
         position: new Vector3(
-          curvePoints[2].x,
-          curvePoints[2].y + 2,
+          curvePoints[2].x + 2,
+          curvePoints[2].y,
           curvePoints[2].z
         ),
         texture: "/images/jetcenter.jpg",
@@ -105,8 +70,8 @@ export const Experience = () => {
       {
         cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[3].x,
-          curvePoints[3].y + 2,
+          curvePoints[3].x - 3,
+          curvePoints[3].y,
           curvePoints[3].z
         ),
         texture: "/images/medical.jpg",
@@ -250,18 +215,53 @@ export const Experience = () => {
 
   const cameraGroup = useRef();
   const cameraRail = useRef();
+  const camera = useRef();
   const scroll = useScroll();
   const lastScroll = useRef(0);
+
   const { play, setHasScroll, end, setEnd } = usePlay();
 
   useFrame((_state, delta) => {
+    if (window.innerWidth > window.innerHeight) {
+      // LANDSCAPE
+      camera.current.fov = 75;
+      camera.current.position.z = 4;
+    } else {
+      // PORTRAIT
+      camera.current.fov = 80;
+      camera.current.position.z = 2;
+    }
+
+    if (lastScroll.current <= 0 && scroll.offset > 0) {
+      setHasScroll(true);
+    }
+
+    if (play && !end && sceneOpacity.current < 1) {
+      sceneOpacity.current = THREE.MathUtils.lerp(
+        sceneOpacity.current,
+        1,
+        delta * 0.1
+      );
+    }
+
+    if (end && sceneOpacity.current > 0) {
+      sceneOpacity.current = THREE.MathUtils.lerp(
+        sceneOpacity.current,
+        0,
+        delta
+      );
+    }
+
+    lineMaterialRef.current.opacity = sceneOpacity.current;
+
+    if (end) {
+      return;
+    }
+
     const scrollOffset = Math.max(0, scroll.offset);
 
     let friction = 1;
     let resetCameraRail = true;
-    if (lastScroll.current <= 0 && scroll.offset > 0) {
-      setHasScroll(true);
-    }
     // LOOK TO CLOSE TEXT SECTIONS
     textSections.forEach((textSection) => {
       const distance = textSection.position.distanceTo(
@@ -359,23 +359,26 @@ export const Experience = () => {
     );
     airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
 
-    // Update ambient light intensity based on scroll
-    if (ambientLightRef.current) {
-      ambientLightRef.current.intensity = Math.max(
-        (Math.PI / 6) * (1 - lerpedScrollOffset),
-        0.1
-      );
+    if (
+      cameraGroup.current.position.z <
+      curvePoints[curvePoints.length - 1].z + 100
+    ) {
+      setEnd(true);
+      planeOutTl.current.play();
     }
   });
 
   const airplane = useRef();
+  const ambientLightRef = useRef();
 
   const tl = useRef();
   const backgroundColors = useRef({
     colorA: "#3535cc",
     colorB: "#abaadd",
   });
-  const ambientLightRef = useRef(); // Reference for the ambient light
+
+  const planeInTl = useRef();
+  const planeOutTl = useRef();
 
   useLayoutEffect(() => {
     tl.current = gsap.timeline();
@@ -409,21 +412,65 @@ export const Experience = () => {
     });
 
     tl.current.pause();
+
+    planeInTl.current = gsap.timeline();
+    planeInTl.current.pause();
+    planeInTl.current.from(airplane.current.position, {
+      duration: 3,
+      z: 5,
+      y: -2,
+    });
+
+    planeOutTl.current = gsap.timeline();
+    planeOutTl.current.pause();
+
+    planeOutTl.current.to(
+      airplane.current.position,
+      {
+        duration: 10,
+        z: -250,
+        y: 10,
+      },
+      0
+    );
+    planeOutTl.current.to(
+      cameraRail.current.position,
+      {
+        duration: 8,
+        y: 12,
+      },
+      0
+    );
+    planeOutTl.current.to(airplane.current.position, {
+      duration: 1,
+      z: -1000,
+    });
   }, []);
 
-  const { scene } = useThree();
+  useEffect(() => {
+    if (play) {
+      planeInTl.current.play();
+    }
+  }, [play]);
 
   return useMemo(
     () => (
       <>
-        {/* <OrbitControls /> */}
         {!isProduction && <Perf position="top-left" />}
+
+        {/* <OrbitControls /> */}
         <group ref={cameraGroup}>
           <Background backgroundColors={backgroundColors} />
           <group ref={cameraRail}>
-            <PerspectiveCamera position={[0, 1, 4]} fov={75} makeDefault />
+            <PerspectiveCamera
+              ref={camera}
+              position={[0, 1, 4]}
+              fov={75}
+              makeDefault
+            />
           </group>
           <ambientLight ref={ambientLightRef} intensity={Math.PI / 6} />
+
           <group ref={airplane}>
             <Float floatIntensity={3} rotationIntensity={0} speed={3}>
               <Airplane
@@ -434,12 +481,13 @@ export const Experience = () => {
             </Float>
           </group>
         </group>
-
+        {/* TEXT */}
         {textSections.map((textSection, index) => (
           <TextSection {...textSection} key={index} />
         ))}
 
-        <group position-y={-5}>
+        {/* LINE */}
+        <group position-y={-2}>
           <mesh>
             <extrudeGeometry
               args={[
@@ -453,24 +501,19 @@ export const Experience = () => {
             />
             <meshStandardMaterial
               color={"white"}
-              opacity={1}
+              ref={lineMaterialRef}
               transparent
               envMapIntensity={2}
               onBeforeCompile={fadeOnBeforeCompile}
             />
           </mesh>
         </group>
-        {/* CLOUDS */}
-        {/* {clouds.map((cloud, index) => (
-        <CloudTest {...cloud} key={index} scale={4} />
-      ))} */}
-        {/* <CloudsGroup opacity={Math.random()} /> */}
-
         <Suspense fallback={null}>
           <CloudsGroup />
         </Suspense>
+        {/* CLOUDS */}
         {clouds.map((cloud, index) => (
-          <Cloud {...cloud} opacity={Math.random() + 0.1} key={index} />
+          <Cloud sceneOpacity={sceneOpacity} {...cloud} key={index} />
         ))}
       </>
     ),

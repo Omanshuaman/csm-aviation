@@ -1,11 +1,10 @@
+import { ScrollControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Experience } from "./components/Experience";
-import { Leva } from "leva";
-import { Scroll, ScrollControls } from "@react-three/drei";
-import Interface from "./components/Interface";
 import { EffectComposer, Noise } from "@react-three/postprocessing";
+import { Experience } from "./components/Experience";
 import { Overlay } from "./components/Overlay";
 import { usePlay } from "./contexts/Play";
+import { Leva } from "leva";
 
 function App() {
   const { play, end } = usePlay();
@@ -13,11 +12,12 @@ function App() {
   return (
     <>
       <Leva collapsed />
+
       <Canvas>
         <color attach="background" args={["#ececec"]} />
         <ScrollControls
-          pages={play && !end ? 50 : 0}
-          damping={0}
+          pages={play && !end ? 40 : 0}
+          damping={0.5}
           style={{
             top: "10px",
             left: "0px",
@@ -30,9 +30,8 @@ function App() {
           }}>
           <Experience />
         </ScrollControls>
-
         <EffectComposer>
-          <Noise opacity={0.02} />
+          <Noise opacity={0.15} />
         </EffectComposer>
       </Canvas>
       <Overlay />
