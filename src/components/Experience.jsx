@@ -13,6 +13,7 @@ import { TextSection } from "./TextSection";
 const isProduction = window.location.protocol === "https:";
 import { Perf } from "r3f-perf";
 import CloudsGroup from "./CloudGroup";
+import { Speed } from "./Speed";
 
 const LINE_NB_POINTS = 1000;
 const CURVE_DISTANCE = 250;
@@ -335,6 +336,13 @@ export const Experience = () => {
       setEnd(true);
       planeOutTl.current.play();
     }
+    // Update ambient light intensity based on scroll
+    if (ambientLightRef.current) {
+      ambientLightRef.current.intensity = Math.max(
+        (Math.PI / 6) * (1 - lerpedScrollOffset),
+        0.1
+      );
+    }
   });
 
   const airplane = useRef();
@@ -430,6 +438,7 @@ export const Experience = () => {
         {/* <OrbitControls /> */}
         <group ref={cameraGroup}>
           <Background backgroundColors={backgroundColors} />
+          <Speed />
           <group ref={cameraRail}>
             <PerspectiveCamera
               ref={camera}
@@ -438,7 +447,7 @@ export const Experience = () => {
               makeDefault
             />
           </group>
-          <ambientLight ref={ambientLightRef} intensity={Math.PI / 6} />
+          <ambientLight ref={ambientLightRef} intensity={Math.PI / 8} />
 
           <group ref={airplane}>
             <Float floatIntensity={3} rotationIntensity={0} speed={3}>

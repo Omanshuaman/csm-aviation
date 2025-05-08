@@ -18,7 +18,7 @@ export function Cloud({ sceneOpacity, ...props }) {
 
   return (
     <group {...props} dispose={null}>
-      <mesh geometry={nodes.Mball001.geometry}>
+      <mesh geometry={nodes.Mball001.geometry} receiveShadow>
         <meshStandardMaterial
           ref={materialRef}
           onBeforeCompile={fadeOnBeforeCompile}

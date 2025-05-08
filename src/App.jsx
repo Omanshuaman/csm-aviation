@@ -13,7 +13,7 @@ function App() {
     <>
       <Leva collapsed />
 
-      <Canvas>
+      <Canvas shadows>
         <color attach="background" args={["#ececec"]} />
         <ScrollControls
           pages={play && !end ? 20 : 0}
