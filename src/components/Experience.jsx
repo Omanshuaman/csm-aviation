@@ -29,9 +29,7 @@ export const Experience = () => {
       new THREE.Vector3(100, 0, -2 * CURVE_DISTANCE),
       new THREE.Vector3(-100, 0, -3 * CURVE_DISTANCE),
       new THREE.Vector3(100, 0, -4 * CURVE_DISTANCE),
-      new THREE.Vector3(0, 0, -5 * CURVE_DISTANCE),
-      new THREE.Vector3(0, 0, -6 * CURVE_DISTANCE),
-      new THREE.Vector3(0, 0, -7 * CURVE_DISTANCE),
+      new THREE.Vector3(100, 0, -5 * CURVE_DISTANCE),
     ],
     []
   );
@@ -48,9 +46,9 @@ export const Experience = () => {
       {
         cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[1].x - 1,
-          curvePoints[1].y + 1.5,
-          curvePoints[1].z
+          curvePoints[1].x - 6,
+          curvePoints[1].y + 1,
+          curvePoints[1].z + CURVE_DISTANCE / 2
         ),
         texture: "/images/pilot.jpg",
         title: "Wholesale - Jet Brokers",
@@ -59,8 +57,8 @@ export const Experience = () => {
       {
         cameraRailDist: 1.5,
         position: new Vector3(
-          curvePoints[2].x + 1,
-          curvePoints[2].y + 1.5,
+          curvePoints[2].x + 2,
+          curvePoints[2].y,
           curvePoints[2].z
         ),
         texture: "/images/jetcenter.jpg",
@@ -70,8 +68,8 @@ export const Experience = () => {
       {
         cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[3].x - 1,
-          curvePoints[3].y + 1.5,
+          curvePoints[3].x - 3,
+          curvePoints[3].y,
           curvePoints[3].z
         ),
         texture: "/images/medical.jpg",
@@ -81,7 +79,6 @@ export const Experience = () => {
       },
     ];
   }, []);
-
   const clouds = useMemo(
     () => [
       // SECOND POINT
@@ -172,34 +169,6 @@ export const Experience = () => {
           curvePoints[4].z - 62
         ),
         rotation: new Euler(Math.PI / 3, 0, Math.PI / 3),
-      },
-      // FINAL
-      {
-        scale: new Vector3(3, 3, 3),
-        position: new Vector3(
-          curvePoints[7].x + 12,
-          curvePoints[7].y - 5,
-          curvePoints[7].z + 60
-        ),
-        rotation: new Euler(-Math.PI / 4, -Math.PI / 6, 0),
-      },
-      {
-        scale: new Vector3(3, 3, 3),
-        position: new Vector3(
-          curvePoints[7].x - 12,
-          curvePoints[7].y + 5,
-          curvePoints[7].z + 120
-        ),
-        rotation: new Euler(Math.PI / 4, Math.PI / 6, 0),
-      },
-      {
-        scale: new Vector3(4, 4, 4),
-        position: new Vector3(
-          curvePoints[7].x,
-          curvePoints[7].y,
-          curvePoints[7].z
-        ),
-        rotation: new Euler(0, 0, 0),
       },
     ],
     []
