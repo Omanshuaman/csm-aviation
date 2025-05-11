@@ -1,4 +1,9 @@
-import { Float, PerspectiveCamera, useScroll } from "@react-three/drei";
+import {
+  Float,
+  OrbitControls,
+  PerspectiveCamera,
+  useScroll,
+} from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { gsap } from "gsap";
 import { Suspense, useEffect, useLayoutEffect, useMemo, useRef } from "react";
@@ -14,6 +19,7 @@ const isProduction = window.location.protocol === "https:";
 import { Perf } from "r3f-perf";
 import CloudsGroup from "./CloudGroup";
 import { Speed } from "./Speed";
+import { City } from "./City";
 
 const LINE_NB_POINTS = 1000;
 const CURVE_DISTANCE = 250;
@@ -339,7 +345,7 @@ export const Experience = () => {
     // Update ambient light intensity based on scroll
     if (ambientLightRef.current) {
       ambientLightRef.current.intensity = Math.max(
-        (Math.PI / 6) * (1 - lerpedScrollOffset),
+        (Math.PI / 7) * (1 - lerpedScrollOffset),
         0.1
       );
     }
@@ -434,7 +440,7 @@ export const Experience = () => {
     () => (
       <>
         {!isProduction && <Perf position="top-left" />}
-
+        <directionalLight intensity={0.5} position={[0, 1, 0]} />
         {/* <OrbitControls /> */}
         <group ref={cameraGroup}>
           <Background backgroundColors={backgroundColors} />
@@ -447,7 +453,7 @@ export const Experience = () => {
               makeDefault
             />
           </group>
-          <ambientLight ref={ambientLightRef} intensity={Math.PI / 8} />
+          <ambientLight ref={ambientLightRef} />
 
           <group ref={airplane}>
             <Float floatIntensity={3} rotationIntensity={0} speed={3}>
@@ -463,6 +469,7 @@ export const Experience = () => {
         {textSections.map((textSection, index) => (
           <TextSection {...textSection} key={index} />
         ))}
+        <City scale={0.002} position={[-400, 10, -700]} />
 
         {/* LINE */}
         <group position-y={-2}>
