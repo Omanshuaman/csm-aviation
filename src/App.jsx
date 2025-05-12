@@ -1,10 +1,11 @@
-import { ScrollControls } from "@react-three/drei";
+import { Scroll, ScrollControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Noise } from "@react-three/postprocessing";
 import { Experience } from "./components/Experience";
 import { Overlay } from "./components/Overlay";
 import { usePlay } from "./contexts/Play";
 import { Leva } from "leva";
+import Interface from "./components/Interface";
 
 function App() {
   const { play, end } = usePlay();
@@ -29,6 +30,9 @@ function App() {
             opacity: 0,
           }}>
           <Experience />
+          <Scroll html>
+            <Interface />
+          </Scroll>
         </ScrollControls>
         <EffectComposer>
           <Noise opacity={0.1} />

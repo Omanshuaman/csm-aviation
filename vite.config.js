@@ -4,5 +4,17 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react({
+      jsxImportSource: "react",
+      jsc: {
+        transform: {
+          react: {
+            throwIfNamespace: false, // Allow JSX namespaces
+          },
+        },
+      },
+    }),
+    tailwindcss(),
+  ],
 });

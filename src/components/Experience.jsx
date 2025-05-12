@@ -468,7 +468,6 @@ export const Experience = () => {
         {textSections.map((textSection, index) => (
           <TextSection {...textSection} key={index} />
         ))}
-        <City scale={0.002} position={[-400, 10, -700]} />
 
         {/* LINE */}
         <group position-y={-2}>
