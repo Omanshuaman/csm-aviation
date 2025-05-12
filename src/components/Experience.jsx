@@ -339,8 +339,7 @@ export const Experience = () => {
       cameraGroup.current.position.z <
       curvePoints[curvePoints.length - 1].z + 100
     ) {
-      setEnd(true);
-      planeOutTl.current.play();
+      setEnd(false);
     }
     // Update ambient light intensity based on scroll
     if (ambientLightRef.current) {
