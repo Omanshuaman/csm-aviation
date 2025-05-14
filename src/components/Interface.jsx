@@ -47,12 +47,6 @@ const Clouds = () => {
 
   return (
     <div className="absolute inset-0 overflow-hidden scroll-container">
-      {/* Added mountBg image */}
-      <img
-        src="https://assets.codepen.io/721952/cloud1.png"
-        alt="Cloud 1"
-        className="absolute top-10 left-0 w-full cloud1"
-      />
       <img
         src="https://assets.codepen.io/721952/cloud2.png"
         alt="Cloud 2"
