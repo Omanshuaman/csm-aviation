@@ -6,6 +6,7 @@ import { Overlay } from "./components/Overlay";
 import { usePlay } from "./contexts/Play";
 import { Leva } from "leva";
 import Interface from "./components/Interface";
+import Earth from "./components/Earth";
 
 function SceneOne() {
   const { play, end } = usePlay();
@@ -42,18 +43,7 @@ function SceneOne() {
     </>
   );
 }
-function SceneTwo() {
-  return (
-    <Canvas>
-      <ambientLight />
-      <mesh>
-        <sphereGeometry />
-        <meshStandardMaterial color="skyblue" />
-      </mesh>
-      <OrbitControls enableZoom={false} />
-    </Canvas>
-  );
-}
+
 function App() {
   return (
     <div className="scroll-container">
@@ -61,7 +51,7 @@ function App() {
         <SceneOne />
       </section>
       <section className="scene-section">
-        <SceneTwo />
+        <Earth />
       </section>
     </div>
   );
