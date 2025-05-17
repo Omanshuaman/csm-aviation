@@ -202,7 +202,7 @@ body {
 }
 
 .outro--appear {
-  opacity: 1;
+  opacity: 0;
 }
 
 .outro__text {
@@ -288,4 +288,22 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+.scroll-container {
+  height: 100vh;
+  width: 100vw;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.scene-section {
+  scroll-snap-align: start;
+  height: 100vh;
+  width: 100vw;
 }

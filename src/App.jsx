@@ -1,4 +1,4 @@
-import { Scroll, ScrollControls } from "@react-three/drei";
+import { OrbitControls, Scroll, ScrollControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { EffectComposer, Noise } from "@react-three/postprocessing";
 import { Experience } from "./components/Experience";
@@ -7,7 +7,7 @@ import { usePlay } from "./contexts/Play";
 import { Leva } from "leva";
 import Interface from "./components/Interface";
 
-function App() {
+function SceneOne() {
   const { play, end } = usePlay();
 
   return (
@@ -30,9 +30,9 @@ function App() {
             opacity: 0,
           }}>
           <Experience />
-          <Scroll html>
+          {/* <Scroll html>
             <Interface />
-          </Scroll>
+          </Scroll> */}
         </ScrollControls>
         <EffectComposer>
           <Noise opacity={0.1} />
@@ -42,5 +42,28 @@ function App() {
     </>
   );
 }
-
+function SceneTwo() {
+  return (
+    <Canvas>
+      <ambientLight />
+      <mesh>
+        <sphereGeometry />
+        <meshStandardMaterial color="skyblue" />
+      </mesh>
+      <OrbitControls enableZoom={false} />
+    </Canvas>
+  );
+}
+function App() {
+  return (
+    <div className="scroll-container">
+      <section className="scene-section">
+        <SceneOne />
+      </section>
+      <section className="scene-section">
+        <SceneTwo />
+      </section>
+    </div>
+  );
+}
 export default App;

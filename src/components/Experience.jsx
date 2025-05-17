@@ -341,7 +341,6 @@ export const Experience = () => {
     ) {
       setEnd(false);
     }
-    // Update ambient light intensity based on scroll
     if (ambientLightRef.current) {
       ambientLightRef.current.intensity = Math.max(
         (Math.PI / 7) * (1 - lerpedScrollOffset),
